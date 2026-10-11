@@ -1,100 +1,63 @@
-
 import Link from "next/link";
-import NewsCard from "../../components/NewsCard";
-import berita from "../../data/berita";
+import BeritaList from "../../components/BeritaList";
+import Reveal from "../../components/Reveal";
+import { getBeritaTerurut } from "../../lib/Helperberita";
 
 export const metadata = {
-  title: "Berita Sekolah",
-  description: "Informasi dan kegiatan SMAN 2 Semarang.",
+  title: "Berita",
+  description:
+    "Berita, kegiatan, dan informasi terbaru dari lingkungan SMAN 2 Semarang.",
 };
 
 export default function BeritaPage() {
-  const daftarBerita = [...berita].sort(
-    (a, b) => new Date(b.tanggal) - new Date(a.tanggal)
-  );
+  const items = getBeritaTerurut();
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      <section className="bg-slate-900 px-6 py-16 text-white md:py-24">
-        <div className="mx-auto max-w-6xl">
-          <p className="text-sm font-semibold uppercase tracking-[0.25em] text-sky-300">
-            Informasi Sekolah
-          </p>
+    <>
+      {/* Header halaman */}
+      <section className="bg-modern-navy text-white">
+        <div className="container-page py-20 md:py-24">
+          <nav aria-label="Breadcrumb" className="text-sm text-blue-200">
+            <Link href="/" className="transition hover:text-gold">
+              Beranda
+            </Link>
+            <span className="mx-2 text-gold">›</span>
+            <span className="text-white">Berita</span>
+          </nav>
 
-          <h1 className="mt-4 text-4xl font-bold md:text-6xl">
-            Berita dan Kegiatan
+          <p className="section-label mt-8 !text-gold">Kabar Sekolah</p>
+
+          <h1 className="mt-4 max-w-3xl text-4xl font-semibold leading-[1.1] sm:text-5xl lg:text-6xl">
+            Berita dan <span className="italic text-gold">kegiatan</span>{" "}
+            terbaru
           </h1>
 
-          <p className="mt-5 max-w-2xl leading-8 text-slate-300">
-            Ikuti informasi, kegiatan, dan cerita perkembangan warga sekolah
-            melalui halaman berita SMAN 2 Semarang.
+          <p className="mt-6 max-w-2xl text-base leading-8 text-blue-100 md:text-lg">
+            Ikuti informasi, prestasi, dan cerita dari lingkungan SMAN 2
+            Semarang.
           </p>
+        </div>
 
-          <Link
-            href="/"
-            className="mt-8 inline-flex rounded-xl border border-slate-500 px-5 py-3 font-semibold transition hover:bg-white hover:text-slate-900"
-          >
-            Kembali ke Beranda
-          </Link>
+        <div className="flex h-1.5">
+          <span className="flex-[5] bg-royal" />
+          <span className="flex-[2] bg-sky" />
+          <span className="flex-1 bg-brand-red" />
+          <span className="flex-1 bg-gold" />
         </div>
       </section>
 
-      <section className="mx-auto max-w-6xl px-6 py-14 md:py-20">
-        <div className="mb-8 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-          <div>
-            <p className="text-sm font-semibold uppercase tracking-widest text-sky-700">
-              Arsip Berita
+      <section className="bg-cream py-14 sm:py-20">
+        <div className="container-page">
+          <BeritaList items={items} />
+
+          <Reveal>
+            <p className="mt-10 text-xs leading-6 text-slate-500">
+              Catatan: berita yang ditampilkan saat ini merupakan konten
+              simulasi dan perlu diganti dengan informasi resmi sekolah.
             </p>
-            <h2 className="mt-2 text-2xl font-bold text-slate-900 md:text-3xl">
-              Semua Berita
-            </h2>
-          </div>
-
-          <p className="text-sm text-slate-500">
-            Total {daftarBerita.length} berita
-          </p>
-        </div>
-
-        {daftarBerita.length > 0 ? (
-          <div className="grid gap-7 sm:grid-cols-2 lg:grid-cols-3">
-            {daftarBerita.map((item) => (
-              <NewsCard key={item.slug} berita={item} />
-            ))}
-          </div>
-        ) : (
-          <div className="rounded-2xl border border-dashed border-slate-300 bg-white px-6 py-16 text-center">
-            <h3 className="text-xl font-bold text-slate-800">
-              Belum ada berita
-            </h3>
-            <p className="mt-3 text-slate-500">
-              Berita sekolah akan ditampilkan di sini setelah tersedia.
-            </p>
-          </div>
-        )}
-      </section>
-
-      <section className="px-6 pb-16">
-        <div className="mx-auto max-w-6xl rounded-3xl bg-sky-100 px-6 py-10 text-center md:px-12">
-          <h2 className="text-2xl font-bold text-slate-900">
-            Ingin kembali ke halaman utama?
-          </h2>
-          <p className="mt-3 text-slate-600">
-            Temukan profil sekolah dan informasi terbaru dari beranda.
-          </p>
-          <Link
-            href="/"
-            className="mt-6 inline-flex rounded-xl bg-sky-700 px-6 py-3 font-semibold text-white transition hover:bg-sky-800"
-          >
-            Kunjungi Beranda
-          </Link>
+          </Reveal>
         </div>
       </section>
-
-      <p className="mx-auto max-w-6xl px-6 pb-8 text-xs leading-6 text-slate-500">
-        Catatan: berita yang tersedia saat ini merupakan data simulasi untuk
-        pengembangan website dan bukan pernyataan bahwa kegiatan tersebut
-        benar-benar telah dilaksanakan.
-      </p>
-    </div>
+    </>
   );
 }

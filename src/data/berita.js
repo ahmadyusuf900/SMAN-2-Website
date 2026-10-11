@@ -8,7 +8,7 @@ const berita = [
     ringkasan:
       "Siswa berhasil menunjukkan kemampuan akademik dan meraih hasil membanggakan dalam kompetisi sains tingkat pelajar.",
     gambar:
-      "https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?auto=format&fit=crop&w=1000&q=80",
+      "/images/news/prestasi.jpg",
     isi: [
       "Siswa SMAN 2 Semarang mengikuti kompetisi sains sebagai bagian dari pengembangan kemampuan akademik dan pemecahan masalah.",
       "Kegiatan ini menjadi pengalaman bagi siswa untuk meningkatkan kemampuan berpikir kritis, bekerja sama, dan mengembangkan potensi mereka.",
@@ -22,7 +22,7 @@ const berita = [
     ringkasan:
       "Program literasi dilaksanakan untuk membangun kebiasaan membaca dan meningkatkan kemampuan memahami informasi.",
     gambar:
-      "https://images.unsplash.com/photo-1507842217343-583bb7270b66?auto=format&fit=crop&w=1000&q=80",
+      "/images/news/membaca.jpg",
     isi: [
       "Program literasi merupakan salah satu contoh kegiatan yang dapat mendukung budaya belajar di lingkungan sekolah.",
       "Melalui kegiatan membaca secara rutin, siswa diharapkan dapat memperluas wawasan dan meningkatkan kemampuan berpikir kritis.",
@@ -36,7 +36,7 @@ const berita = [
     ringkasan:
       "Kegiatan organisasi siswa menjadi sarana untuk melatih komunikasi, tanggung jawab, dan kerja sama.",
     gambar:
-      "https://images.unsplash.com/photo-1523580494863-6f3031224c94?auto=format&fit=crop&w=1000&q=80",
+      "/images/news/kegiatan osis.jpg",
     isi: [
       "Kegiatan pengembangan kepemimpinan dapat membantu siswa memahami pentingnya tanggung jawab dan kolaborasi.",
       "Siswa memperoleh kesempatan untuk melatih komunikasi, menyusun rencana kegiatan, dan bekerja bersama untuk mencapai tujuan.",
@@ -50,7 +50,7 @@ const berita = [
     ringkasan:
       "Program peduli lingkungan mengajak warga sekolah menjaga kebersihan dan membangun kebiasaan hidup berkelanjutan.",
     gambar:
-      "https://images.unsplash.com/photo-1472396961693-142e6e269027?auto=format&fit=crop&w=1000&q=80",
+      "/images/news/menanam.jpg",
     isi: [
       "Kepedulian terhadap lingkungan dapat dimulai dari kebiasaan sederhana di sekolah, seperti menjaga kebersihan dan mengurangi sampah.",
       "Program ini merupakan contoh kegiatan simulasi yang dapat disesuaikan dengan program lingkungan sekolah yang sebenarnya.",
@@ -64,7 +64,7 @@ const berita = [
     ringkasan:
       "Pameran karya menjadi contoh wadah untuk menampilkan ide, kreativitas, dan keterampilan siswa.",
     gambar:
-      "https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&w=1000&q=80",
+      "/images/news/Pameran.jpg",
     isi: [
       "Kegiatan pameran karya memberikan kesempatan kepada siswa untuk memperkenalkan hasil kreativitas mereka.",
       "Kegiatan seperti ini juga dapat membantu siswa belajar menyampaikan ide dan menghargai karya orang lain.",
@@ -78,7 +78,7 @@ const berita = [
     ringkasan:
       "Kegiatan olahraga antarkelas menjadi contoh aktivitas untuk mengembangkan sportivitas dan kebersamaan siswa.",
     gambar:
-      "https://images.unsplash.com/photo-1461896836934-ffe607ba8211?auto=format&fit=crop&w=1000&q=80",
+      "/images/news/classmeet.jpg",
     isi: [
       "Kegiatan olahraga di sekolah dapat menjadi sarana untuk membangun kebugaran, kedisiplinan, dan sportivitas.",
       "Melalui kegiatan bersama, siswa dapat belajar menghargai aturan dan bekerja sama dengan teman-temannya.",

@@ -1,33 +1,230 @@
-
 @import "tailwindcss";
 
+/* ===== Warna & font (jadi class Tailwind: bg-navy, text-gold, font-display, dst.) ===== */
+@theme {
+  --color-royal: #0147d4;      /* biru logo */
+  --color-sky: #438ad9;        /* biru muda logo */
+  --color-navy: #0b1b3f;       /* biru tinta (warna "berat") */
+  --color-ink: #172033;        /* teks utama */
+  --color-cream: #faf6ec;      /* latar hangat */
+  --color-sand: #f3ecdd;       /* latar hangat, sedikit lebih gelap */
+  --color-gold: #e3b02b;       /* kuning/emas */
+  --color-gold-dark: #cf9d1c;
+  --color-brand-red: #ff0002;  /* merah logo, hanya untuk aksen kecil */
+}
+
+@theme inline {
+  --font-display: "Plus Jakarta Sans", var(--font-sans);
+  --font-sans: "Inter", system-ui, "-apple-system", "Segoe UI", sans-serif;
+}
+
+/* Nama variabel lama, supaya halaman lain (about, berita) tidak rusak */
 :root {
-  --background: #ffffff;
+  --primary: #0147d4;
+  --primary-light: #438ad9;
+  --accent-red: #ff0002;
+  --accent-yellow: #e3b02b;
+  --white: #ffffff;
+  --background: #faf6ec;
+  --background-soft: #f3ecdd;
   --foreground: #172033;
+  --muted: #64748b;
+  --border: #e5dcc8;
+  --footer: #0b1b3f;
+  --font-body: var(--font-jakarta), system-ui, sans-serif;
+  --font-heading: var(--font-fraunces), Georgia, serif;
 }
 
-* {
-  box-sizing: border-box;
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 90px;
+  }
+
+  body {
+    background: var(--color-cream);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+  }
+
+  button { cursor: pointer; }
+
+  ::selection {
+    background: var(--color-royal);
+    color: #fff;
+  }
 }
 
-html {
-  scroll-behavior: smooth;
+@layer components {
+  .container-page {
+    width: min(100% - 2rem, 1180px);
+    margin-inline: auto;
+  }
+
+  .section-padding { padding-block: 4rem; }
+
+  .section-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    color: var(--color-royal);
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+  .section-label::before {
+    content: "";
+    width: 28px;
+    height: 3px;
+    background: var(--color-brand-red);
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border: 1px solid var(--color-royal);
+    border-radius: 0.5rem;
+    background: var(--color-royal);
+    padding: 0.8rem 1.25rem;
+    color: #fff;
+    font-size: 0.875rem;
+    font-weight: 700;
+    transition: background 180ms ease, transform 180ms ease;
+  }
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    background: var(--color-navy);
+    border-color: var(--color-navy);
+  }
+
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border: 1px solid var(--color-navy);
+    border-radius: 0.5rem;
+    background: transparent;
+    padding: 0.8rem 1.25rem;
+    color: var(--color-navy);
+    font-size: 0.875rem;
+    font-weight: 700;
+    transition: background 180ms ease, color 180ms ease, transform 180ms ease;
+  }
+  .btn-secondary:hover {
+    transform: translateY(-2px);
+    background: var(--color-navy);
+    color: #fff;
+  }
 }
 
-body {
-  margin: 0;
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@media (min-width: 768px) {
+  .container-page { width: min(100% - 4rem, 1180px); }
+  .section-padding { padding-block: 6rem; }
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
+/* ===== Animasi ===== */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal-in {
+  opacity: 1;
+  transform: none;
 }
 
-button,
-input,
-textarea {
-  font: inherit;
+@keyframes heroProgress {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+.hero-progress {
+  transform-origin: left;
+  animation-name: heroProgress;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { scrollbar-width: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ===== TEMPEL DI PALING BAWAH src/app/globals.css ===== */
+
+/* Latar modern untuk section gelap (pengganti garis miring):
+   cahaya gradasi + pola titik memudar + lingkaran konsentris */
+.bg-modern-navy {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background-color: var(--color-navy);
+  background-image:
+    radial-gradient(60% 90% at 88% 0%, rgba(1, 71, 212, 0.55) 0%, transparent 62%),
+    radial-gradient(45% 70% at 0% 100%, rgba(67, 138, 217, 0.28) 0%, transparent 60%),
+    radial-gradient(30% 50% at 55% 110%, rgba(227, 176, 43, 0.14) 0%, transparent 70%);
+}
+
+/* Pola titik, memudar menjauhi pojok kanan atas */
+.bg-modern-navy::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.16) 1.2px, transparent 1.3px);
+  background-size: 26px 26px;
+  -webkit-mask-image: radial-gradient(ellipse 75% 90% at 85% 10%, #000 0%, transparent 70%);
+  mask-image: radial-gradient(ellipse 75% 90% at 85% 10%, #000 0%, transparent 70%);
+}
+
+/* Lingkaran konsentris di pojok kanan atas */
+.bg-modern-navy::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  top: -150px;
+  right: -150px;
+  width: 340px;
+  height: 340px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow:
+    0 0 0 55px rgba(255, 255, 255, 0.025),
+    0 0 0 56px rgba(255, 255, 255, 0.11),
+    0 0 0 120px rgba(255, 255, 255, 0.02),
+    0 0 0 121px rgba(255, 255, 255, 0.08);
+  pointer-events: none;
+}
+
+@media (min-width: 1024px) {
+  .bg-modern-navy::after {
+    top: -190px;
+    right: -120px;
+    width: 460px;
+    height: 460px;
+  }
+}
+
+/* Pola titik halus untuk section terang (opsional) */
+.bg-dots-soft {
+  background-image: radial-gradient(rgba(11, 27, 63, 0.09) 1.2px, transparent 1.3px);
+  background-size: 24px 24px;
 }

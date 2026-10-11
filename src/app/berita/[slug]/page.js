@@ -1,116 +1,161 @@
-
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import berita from "../../../data/berita";
+import NewsCard from "../../../components/NewsCard";
+import Reveal from "../../../components/Reveal";
+import {
+  formatTanggal,
+  getBeritaBySlug,
+  getBeritaTerurut,
+  warnaKategori,
+} from "../../../lib/Helperberita";
 
-export function generateStaticParams() {
-  return berita.map((item) => ({
-    slug: item.slug,
-  }));
+export async function generateStaticParams() {
+  return getBeritaTerurut().map((item) => ({ slug: item.slug }));
 }
 
 export async function generateMetadata({ params }) {
   const { slug } = await params;
-  const item = berita.find((beritaItem) => beritaItem.slug === slug);
+  const berita = getBeritaBySlug(slug);
 
-  if (!item) {
-    return {
-      title: "Berita Tidak Ditemukan",
-    };
-  }
+  if (!berita) return { title: "Berita tidak ditemukan" };
 
   return {
-    title: item.judul,
-    description: item.ringkasan,
+    title: berita.judul,
+    description: berita.ringkasan,
+    openGraph: {
+      title: berita.judul,
+      description: berita.ringkasan,
+      images: [berita.gambar],
+    },
   };
 }
 
-export default async function DetailBeritaPage({ params }) {
+export default async function BeritaDetailPage({ params }) {
   const { slug } = await params;
+  const berita = getBeritaBySlug(slug);
 
-  const item = berita.find((beritaItem) => beritaItem.slug === slug);
+  if (!berita) notFound();
 
-  if (!item) {
-    notFound();
-  }
-
-  const tanggalFormat = new Date(
-    `${item.tanggal}T00:00:00`
-  ).toLocaleDateString("id-ID", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  });
+  const lainnya = getBeritaTerurut()
+    .filter((item) => item.slug !== slug)
+    .slice(0, 3);
 
   return (
-    <article className="min-h-screen bg-white">
-      <section className="bg-slate-900 px-6 py-12 text-white md:py-16">
-        <div className="mx-auto max-w-4xl">
-          <Link
-            href="/berita"
-            className="inline-flex items-center gap-2 text-sm font-semibold text-sky-300 transition hover:text-white"
-          >
-            <span aria-hidden="true">←</span>
-            Kembali ke Daftar Berita
-          </Link>
+    <>
+      {/* Header artikel */}
+      <section className="bg-modern-navy pb-28 pt-14 text-white sm:pb-32 sm:pt-16">
+        <div className="container-page">
+          <nav aria-label="Breadcrumb" className="text-sm text-blue-200">
+            <Link href="/" className="transition hover:text-gold">
+              Beranda
+            </Link>
+            <span className="mx-2 text-gold">›</span>
+            <Link href="/berita" className="transition hover:text-gold">
+              Berita
+            </Link>
+          </nav>
 
-          <p className="mt-8 text-sm font-semibold uppercase tracking-widest text-sky-300">
-            {item.kategori}
-          </p>
+          <div className="mt-8 flex flex-wrap items-center gap-4 text-xs font-bold uppercase tracking-[0.14em]">
+            <span className="flex items-center bg-white text-navy">
+              <span
+                className={`mr-2.5 h-full w-1.5 self-stretch ${warnaKategori(
+                  berita.kategori
+                )}`}
+              />
+              <span className="py-1.5 pr-3">{berita.kategori}</span>
+            </span>
+            <time dateTime={berita.tanggal} className="text-gold">
+              {formatTanggal(berita.tanggal)}
+            </time>
+          </div>
 
-          <h1 className="mt-4 text-3xl font-bold leading-tight md:text-5xl">
-            {item.judul}
+          <h1 className="mt-5 max-w-4xl text-3xl font-semibold leading-[1.15] sm:text-4xl lg:text-5xl">
+            {berita.judul}
           </h1>
-
-          <p className="mt-5 text-sm text-slate-300">
-            Dipublikasikan pada {tanggalFormat}
-          </p>
         </div>
       </section>
 
-      <div className="mx-auto max-w-4xl px-6 py-10 md:py-14">
-        <div className="relative aspect-video overflow-hidden rounded-2xl bg-slate-100">
-          <Image
-            src={item.gambar}
-            alt={item.judul}
-            fill
-            priority
-            sizes="(max-width: 896px) 100vw, 896px"
-            className="object-cover"
-          />
-        </div>
+      {/* Gambar + isi */}
+      <section className="bg-cream pb-16 sm:pb-24">
+        <div className="container-page">
+          <div className="relative z-10 mx-auto -mt-20 aspect-[16/9] max-w-4xl overflow-hidden bg-sand shadow-2xl shadow-navy/20 sm:-mt-24">
+            <Image
+              src={berita.gambar}
+              alt={berita.judul}
+              fill
+              priority
+              sizes="(max-width: 1024px) 100vw, 896px"
+              className="object-cover"
+            />
+            <span className="absolute left-0 top-0 h-1.5 w-24 bg-gold" />
+            <span className="absolute left-24 top-0 h-1.5 w-10 bg-brand-red" />
+          </div>
 
-        <p className="mt-8 border-l-4 border-sky-600 pl-5 text-lg leading-8 text-slate-700">
-          {item.ringkasan}
-        </p>
-
-        <div className="mt-8 space-y-5">
-          {item.isi.map((paragraf, index) => (
-            <p
-              key={index}
-              className="text-base leading-8 text-slate-600"
-            >
-              {paragraf}
+          <article className="mx-auto mt-10 max-w-3xl sm:mt-14">
+            <p className="border-l-4 border-gold pl-5 font-display text-xl font-medium leading-snug text-navy sm:text-2xl">
+              {berita.ringkasan}
             </p>
-          ))}
-        </div>
 
-        <div className="mt-12 border-t border-slate-200 pt-8">
-          <Link
-            href="/berita"
-            className="inline-flex rounded-xl bg-sky-700 px-6 py-3 font-semibold text-white transition hover:bg-sky-800"
-          >
-            Lihat Berita Lainnya
-          </Link>
-        </div>
+            <div className="mt-10 space-y-6">
+              {berita.isi.map((paragraf, i) => (
+                <p
+                  key={i}
+                  className={`text-base leading-8 text-slate-700 sm:text-lg sm:leading-9 ${
+                    i === 0
+                      ? "first-letter:float-left first-letter:mr-3 first-letter:font-display first-letter:text-6xl first-letter:font-semibold first-letter:leading-[0.85] first-letter:text-royal"
+                      : ""
+                  }`}
+                >
+                  {paragraf}
+                </p>
+              ))}
+            </div>
 
-        <p className="mt-8 text-xs leading-6 text-slate-500">
-          Catatan: konten berita ini merupakan data simulasi untuk
-          pengembangan website. Perbarui dengan informasi dan dokumentasi
-          resmi sekolah sebelum website dipublikasikan.
-        </p>
-      </div>
-    </article>
+            <div className="mt-12 flex items-center justify-between border-t border-navy/15 pt-6">
+              <Link
+                href="/berita"
+                className="group inline-flex items-center gap-2 text-sm font-bold text-navy transition hover:text-royal"
+              >
+                <span
+                  aria-hidden="true"
+                  className="transition group-hover:-translate-x-1"
+                >
+                  ←
+                </span>
+                Kembali ke semua berita
+              </Link>
+              <div className="flex h-1.5 w-20">
+                <span className="flex-[3] bg-royal" />
+                <span className="flex-1 bg-brand-red" />
+                <span className="flex-1 bg-gold" />
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      {/* Berita lainnya */}
+      {lainnya.length > 0 && (
+        <section className="bg-sand py-16 sm:py-20">
+          <div className="container-page">
+            <Reveal>
+              <p className="section-label">Baca Juga</p>
+              <h2 className="mt-4 text-3xl font-semibold text-navy sm:text-4xl">
+                Berita <span className="italic text-royal">lainnya</span>
+              </h2>
+            </Reveal>
+
+            <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {lainnya.map((item, i) => (
+                <Reveal key={item.slug} delay={i * 100}>
+                  <NewsCard berita={item} />
+                </Reveal>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+    </>
   );
 }
